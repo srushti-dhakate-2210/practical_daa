@@ -1,0 +1,102 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef unsigned long long ull;
+#define pb push_back
+#define ff first
+#define ss second
+#define sortvec(v) sort(v.begin(), v.end())
+#define revvec(v) reverse(v.begin(), v.end())
+
+void readFile(vector<double> &rates)
+{
+    string fname = "STOCK.csv";
+
+    vector<vector<string>> content;
+    vector<string> row;
+    string line, word;
+
+    fstream file(fname, ios::in);
+
+    if (file.is_open())
+    {
+        while (getline(file, line))
+        {
+            row.clear();
+
+            stringstream str(line);
+
+            while (getline(str, word, ','))
+            {
+                row.push_back(word);
+            }
+
+            content.push_back(row);
+        }
+    }
+    else
+    {
+        cout << "Could not open the file\n";
+    }
+
+    for (int i = 0; i < content.size(); i++)
+    {
+        string snum;
+
+        for (int j = 0; j < content[i].size(); j++)
+        {
+            snum += content[i][j];
+        }
+
+        double num = stod(snum);
+
+        rates.push_back(num);
+    }
+}
+
+void findMinMax(vector<double> &rates)
+{
+    double minn = INT_MAX;
+    double maxx = INT_MIN;
+
+    for (auto i : rates)
+    {
+        if (i > maxx)
+        {
+            maxx = i;
+        }
+        if (i < minn)
+        {
+            minn = i;
+        }
+    }
+
+    cout << "MAX VALUE : " << maxx << endl;
+    cout << "MIN VALUE : " << minn << endl << endl;
+}
+
+void printArray(vector<double> &rates)
+{
+    cout << endl;
+
+    for (auto i : rates)
+    {
+        cout << i << endl;
+    }
+    cout << endl << endl;
+}
+
+int main()
+{
+    ll tc = 1;
+
+    vector<double> rates;
+
+    readFile(rates);
+
+    printArray(rates);
+
+    findMinMax(rates);
+
+    return 0;
+}

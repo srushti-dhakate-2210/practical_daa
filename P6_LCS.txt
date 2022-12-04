@@ -1,0 +1,71 @@
+#include <bits/stdc++.h>
+using namespace std;
+void lcs(char *A, char *B, int m, int n)
+{
+    int arr[m + 1][n + 1];
+    for (int i = 0; i < m + 1; i++)
+    {
+        for (int j = 0; j < n + 1; j++)
+        {
+            if (i == 0 || j == 0)
+            {
+                arr[i][j] = 0;
+            }
+            else if (A[i - 1] == B[j - 1])
+            {
+                arr[i][j] = arr[i - 1][j - 1] + 1;
+            }
+            else
+            {
+                arr[i][j] = max(arr[i - 1][j], arr[i][j - 1]);
+            }
+        }
+    }
+    int print = arr[m][n];
+    char lcs[print + 1];
+    lcs[print] = '\0';
+    int i = m;
+    int j = n;
+    while (i > 0 && j > 0)
+    {
+        if (A[i - 1] == B[j - 1])
+        {
+            // current element is same for both then it is part of lcs
+            lcs[print - 1] = A[i - 1];
+            i--;
+            j--;
+            print--;
+        }
+        // If not same, then find the larger of two and
+        // go in the direction of larger value
+        else if (arr[i - 1][j] > arr[i][j - 1])
+        {
+            i--;
+        }
+        else
+        {
+            j--;
+        }
+    }
+    cout << "\n"
+         << endl;
+    cout << "******************************OUTPUT******************************" << endl;
+    cout << "LONGEST COMMON SUBSEQUENCE  IS:" << endl;
+    cout << lcs << endl;
+    cout << "\n"
+         << endl;
+}
+
+int main()
+{
+    // char A[] = "AGCCCTAAGGGCTACCTAGCTT";
+    // char B[] = "GACAGCCTACAAGCGTTAGCTTG";
+
+    char A[] = "DENTING";
+    char B[] = "EDITING";
+
+    int m = strlen(A);
+    int n = strlen(B);
+    lcs(A, B, m, n);
+    return 0;
+}

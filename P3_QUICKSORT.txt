@@ -1,0 +1,83 @@
+#include <bits/stdc++.h>
+#define ll long long int
+#define ull unsigned long long int
+#define mod 1000000007
+using namespace std;
+int cnt = 0;
+
+int partition(int A[], int starting, int ending)
+{
+
+    int i = starting + 1;
+    int piv = A[starting];
+
+    for (int j = starting + 1; j <= ending; j++)
+    {
+        cnt++;
+
+        if (A[j] < piv)
+        {
+            swap(A[i], A[j]);
+            i += 1;
+            cnt++;
+        }
+    }
+
+    swap(A[starting], A[i - 1]);
+
+    return i - 1;
+}
+
+void quick_sort(int A[], int starting, int ending)
+{
+
+    if (starting < ending)
+    {
+
+        // stores the position of pivot element
+        int piv_pos = partition(A, starting, ending);
+        quick_sort(A, starting, piv_pos - 1); // sorts the left side of pivot.
+        quick_sort(A, piv_pos + 1, ending);   // sorts the right side of pivot.
+    }
+}
+
+int main()
+{
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+
+    int A[] = {11, 12, 21, 22, 23, 20, 26, 27, 24, 18, 19, 28, 25, 13, 14, 15, 16, 17, 29, 30};
+    int n = 20;
+   
+    // int A[] = {1, 2, 3, 4, 5};
+    // int A[] = {5, 4, 3, 2, 1};
+    // int n = 5;
+
+    quick_sort(A, 0, n - 1);
+    cout << "***************************SORTED TEAM FROM LOW TO HIGH***************************" << endl;
+    cout << endl;
+    for (int i = 0; i < n; i++)
+    {
+        cout << A[i] << " ";
+    }
+    cout << " " << endl;
+    cout << endl;
+    cout << "***************************WEAK TEAM***************************" << endl;
+    for (int i = 0; i < n / 2; i++)
+    {
+
+        cout << A[i] << " ";
+    }
+    cout << " " << endl;
+    cout << endl;
+    cout << "***************************STRONG TEAM***************************" << endl;
+    for (int i = n / 2; i < n; i++)
+    {
+
+        cout << A[i] << " ";
+    }
+    cout << endl;
+    cout << "\n***************************NUMBER OF COMPARISIONS ARE:***************************" << endl;
+    cout << cnt << endl;
+    return 0;
+}

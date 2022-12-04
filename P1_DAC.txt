@@ -1,0 +1,167 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef unsigned long long ull;
+#define pb push_back
+#define ff first
+#define ss second
+#define sortvec(v) sort(v.begin(), v.end())
+#define revvec(v) reverse(v.begin(), v.end())
+
+void readFile(vector<double> &rates)
+{
+    string fname = "STOCK.csv";
+
+    vector<vector<string>> content;
+    vector<string> row;
+    string line, word;
+
+    fstream file(fname, ios::in);
+
+    if (file.is_open())
+    {
+        while (getline(file, line))
+        {
+            row.clear();
+
+            stringstream str(line);
+
+            while (getline(str, word, ','))
+            {
+                row.push_back(word);
+            }
+
+            content.push_back(row);
+        }
+    }
+    else
+    {
+        cout << "Sorry,Could not open the file\n";
+    }
+
+    for (int i = 0; i < content.size(); i++)
+    {
+        string snum;
+
+        for (int j = 0; j < content[i].size(); j++)
+        {
+            snum += content[i][j];
+        }
+
+        double num = stod(snum);
+
+        rates.push_back(num);
+    }
+}
+
+
+void helper(vector<double> &v, double *maxEl, double *minEl, int beg, int end)
+{
+    if (beg == end) // base case for one element
+    {
+        if (*maxEl < v[beg])
+        {
+            *maxEl = v[beg];
+        }
+        if (*minEl > v[beg])
+        {
+            *minEl = v[beg];
+        }
+
+        return;
+    }
+
+    if ((beg + 1) == end) // base case for two element
+    {
+        if (*maxEl < v[beg])
+        {
+            *maxEl = v[beg];
+        }
+        if (*maxEl < v[end])
+        {
+            *maxEl = v[end];
+        }
+
+        if (*minEl > v[beg])
+        {
+            *minEl = v[beg];
+        }
+        if (*minEl > v[end])
+        {
+            *minEl = v[end];
+        }
+
+        return;
+    }
+
+    double mid = (beg + end) / 2;
+
+    double mx1 = INT_MIN;
+    double mx2 = INT_MIN;
+
+    double mn1 = INT_MAX;
+    double mn2 = INT_MAX;
+
+    helper(v, &mx1, &mn1, beg, mid);
+    helper(v, &mx2, &mn2, mid + 1, end);
+
+    if (mx1 > mx2)
+    {
+        *maxEl = mx1;
+    }
+    else
+    {
+        *maxEl = mx2;
+    }
+
+    if (mn1 > mn2)
+    {
+        *minEl = mn2;
+    }
+    else
+    {
+        *minEl = mn1;
+    }
+
+    
+}
+
+
+void findMinMaxDNC(vector<double> &rates)
+{
+    double maxEl = INT_MIN;
+    double minEl = INT_MAX;
+
+    helper(rates, &maxEl, &minEl, 0, rates.size() - 1);
+
+    cout << endl;
+    cout << "maximum element : " << maxEl << endl;
+    cout << "minimun element : " << minEl << endl << endl;
+
+}
+
+void printArray(vector<double> &rates)
+{
+    cout << endl;
+
+    for (auto i : rates)
+    {
+        cout << i << endl;
+    }
+    cout << endl << endl;
+}
+
+int main()
+{
+    ll tc = 1;
+
+    vector<double> rates;
+
+    readFile(rates);
+
+    printArray(rates);
+
+    findMinMaxDNC(rates);
+
+    return 0;
+}

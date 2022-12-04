@@ -1,0 +1,90 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+bool cmp(pair<string, int> &a, pair<string, int> &b)
+{
+    return a.second < b.second;
+}
+
+vector<string> sort(map<string, int> &file)
+{
+    vector<pair<string, int>> A;
+    vector<string> similar;
+    for (auto &it : file)
+    {
+        A.push_back(it);
+    }
+    sort(A.begin(), A.end(), cmp);
+    for (auto &it : A)
+    {
+        cout << it.first << " ==== " << it.second << endl;
+    }
+    cout << "********************************************" << endl;
+
+    for (int a = 0; a < 5; a++)
+    {
+        similar.push_back(A[a].first);
+    }
+    return similar;
+}
+
+int LDA(string s1, string s2, int m, int n)
+{
+    int mat[m + 1][n + 1];
+
+    for (int i = 0; i <= m; i++)
+    {
+        for (int j = 0; j <= n; j++)
+        {
+            if (i == 0)
+            {
+                mat[i][j] = j;
+            }
+            else if (j == 0)
+            {
+                mat[i][j] = i;
+            }
+            else if (s1[i - 1] == s2[j - 1])
+            {
+                mat[i][j] = mat[i - 1][j - 1];
+            }
+            else
+            {
+                mat[i][j] = 1 + min(min(mat[i][j - 1], mat[i - 1][j]), mat[i - 1][j - 1]);
+            }
+        }
+    }
+
+    return mat[m][n];
+}
+
+int main()
+{
+
+    string input = "hello";
+
+    vector<string> file;
+    map<string, int> mp;
+    file.push_back("help");
+    file.push_back("hello");
+    file.push_back("halo");
+    file.push_back("hero");
+    file.push_back("hell");
+    file.push_back("held");
+    file.push_back("helm");
+
+    for (auto s : file)
+    {
+        int temp = LDA(input, s, input.size(), s.size());
+        mp[s] = temp;
+        cout << temp << " ";
+    }
+    cout << endl;
+    vector<string> similar = sort(mp);
+    cout << "Similar words " << endl;
+    for (auto s : similar)
+    {
+        cout << s << endl;
+    }
+    return 0;
+}
